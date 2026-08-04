@@ -1,0 +1,10 @@
+{
+  "description": "Seamlessly connect your GitHub account to enhance collaboration, streamline project management, and track code changes efficiently.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
