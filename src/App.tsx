@@ -491,10 +491,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* close provider */}
-      </div>
-    </CartContext.Provider>
-
       {/* ── CART DRAWER ────────────────────────────────── */}
       {cartOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 200 }} onClick={() => setCartOpen(false)}>
@@ -538,6 +534,10 @@ export default function App() {
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: -1 }} />
         </div>
       )}
+
+      {/* close provider */}
+      </div>
+    </CartContext.Provider>
 
       {/* ── AURORA HERO ────────────────────────────────── */}
       <section ref={heroRef} id="arrivals" className="aurora-bg" style={{
