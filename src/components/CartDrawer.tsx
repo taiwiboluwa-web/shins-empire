@@ -7,6 +7,16 @@ export default function CartDrawer() {
 
   if (!cartOpen) return null
 
+  const total = cartItems.reduce((acc, it) => acc + (Number(it.price) || 0), 0)
+
+  const handleCheckout = () => {
+    const totalVal = cartItems.reduce((acc, item) => acc + (Number(item.price) || 0), 0)
+    const itemsList = cartItems.map(item => `• ${item.name} - ₦${Number(item.price || 0).toLocaleString()}`).join('\n')
+    const message = `Hello, I would like to place an order from Shin's Empire:\n\n${itemsList}\n\n*Total: ₦${totalVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}*`
+    const whatsappUrl = `https://wa.me/2347045207918?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+  }
+
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 200 }} onClick={() => setCartOpen(false)}>
       <div onClick={e => e.stopPropagation()} className="glass" style={{
@@ -35,12 +45,19 @@ export default function CartDrawer() {
               {cartItems.map((it, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                   <div style={{ fontSize: '0.95rem', fontWeight: 600 }}>{it.name}</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", color: '#c9a84c' }}>{it.price ? `₦${it.price.toLocaleString()}` : '—'}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", color: '#c9a84c' }}>{it.price != null ? `₦${Number(it.price).toLocaleString()}` : '—'}</div>
                 </div>
               ))}
+
+              {/* Subtotal */}
+              <div style={{ marginTop: '1rem', padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.95rem', color: 'rgba(245,242,235,0.8)' }}>Subtotal</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", color: '#c9a84c' }}>₦{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              </div>
+
               <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem' }}>
                 <button onClick={() => { clearCart(); setCartOpen(false) }} className="neu-btn" style={{ padding: '0.6rem 0.9rem' }}>Clear</button>
-                <button className="neu-btn" style={{ background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', padding: '0.6rem 0.9rem', fontWeight: 700 }}>Checkout</button>
+                <button onClick={handleCheckout} className="neu-btn" style={{ background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', padding: '0.6rem 0.9rem', fontWeight: 700 }}>Checkout</button>
               </div>
             </>
           )}
