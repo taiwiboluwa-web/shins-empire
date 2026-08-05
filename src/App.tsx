@@ -293,7 +293,7 @@ function KineticTitle({ lines }: { lines: Array<{ text: string; gold?: boolean; 
 function WhatsAppFloat() {
   return (
     <a href="https://wa.me/2347045207918?text=Hello%2C%20I%20would%20like%20to%20place%20an%20order" style={{
-      position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 500,
+      position: 'fixed', bottom: '6rem', right: '2rem', zIndex: 500,
       width: '54px', height: '54px', borderRadius: '50%',
       background: 'linear-gradient(135deg, #25D366, #128C7E)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
