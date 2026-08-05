@@ -1,7 +1,12 @@
 {
-  "description": "Seamlessly connect your GitHub account to enhance collaboration, streamline project management, and track code changes efficiently.",
+  "title": "Shin's Empire — Luxury Imports",
+  "description": "A curated import house drawing from the finest fashion markets of Dubai, Milan, Istanbul, and Paris, delivered with precision to your door in Lagos.",
+  "language": "en",
   "robots": {
-    "index": false
+    "index": true
+  },
+  "openGraph": {
+    "image": "https://shins-empire.vercel.app/og-image.jpg"
   },
   "accessibility": {
     "addBypassLinks": false,
