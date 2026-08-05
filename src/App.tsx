@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useCallback, createContext } from 'react'
-
-export const CartContext = createContext<{ addToCart: (p: import('@/lib/supabase').Product) => void; cartItems: import('@/lib/supabase').Product[] }>({ addToCart: () => {}, cartItems: [] })
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useCart } from '@/context/CartContext'
 import { Link } from 'react-router-dom'
 import logoDark from '@/imports/SEWA_S__3_-1.png'
 import { supabase, getImageUrl, getSalePrice, type Product } from '@/lib/supabase'
@@ -408,9 +407,7 @@ function BrandVideoSection() {
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
   const [activeNav, setActiveNav] = useState('Arrivals')
-  const [cartOpen, setCartOpen] = useState(false)
-  const [cartItems, setCartItems] = useState<Product[]>([])
-  const addToCart = useCallback((p: Product) => { setCartItems(prev => [...prev, p]); setCartOpen(true) }, [])
+  const { cartItems, addToCart, cartOpen, setCartOpen } = useCart()
   const [latestArrivals, setLatestArrivals] = useState<Product[]>([])
   const [arrivalsLoading, setArrivalsLoading] = useState(true)
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -428,8 +425,7 @@ export default function App() {
   }, [])
 
   return (
-    <CartContext.Provider value={{ addToCart, cartItems }}>
-      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh' }}>
 
         {/* Global ambient layers */}
         <CursorGlow />
@@ -863,7 +859,6 @@ export default function App() {
         </div>
       </footer>
     </div>
-  </CartContext.Provider>
   )
 }
 
