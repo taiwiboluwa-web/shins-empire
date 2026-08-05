@@ -3,55 +3,73 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#070706', color: '#f5f2eb', padding: '3.5rem 2rem 1.25rem', marginTop: '4rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', alignItems: 'start' }}>
+    <footer className="bg-zinc-950 text-white mt-16 pb-24">
+      <div className="max-w-6xl mx-auto px-6 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginBottom: '0.6rem' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(135deg,#c9a84c,#9b7a2e)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#0a0a08', fontFamily: "'DM Mono', monospace", fontSize: '1.05rem' }}>SE</div>
+            <div className="flex items-center gap-4 mb-4">
+              {/* Prefer public root /logo.png so build won't fail if asset isn't imported */}
+              <img src="/logo.png" alt="Shin's Empire" className="w-14 h-14 rounded-full object-cover shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
               <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: 700 }}>Shin's Empire</div>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(245,242,235,0.6)' }}>Cleared for Lagos</div>
+                <div className="text-lg font-semibold">Shin's Empire</div>
+                <div className="text-sm text-neutral-400">Cleared for Lagos</div>
               </div>
             </div>
-            <p style={{ fontSize: '0. nine rem', color: 'rgba(245,242,235,0.65)', lineHeight: 1.6, marginTop: '0.25rem' }}>
-              A curated import house drawing from the finest fashion markets of Dubai, Milan, Istanbul, and Paris, delivered with precision to your door in Lagos.
-            </p>
+            <p className="text-sm text-neutral-300 leading-6">A curated import house drawing from the finest fashion markets of Dubai, Milan, Istanbul, and Paris, delivered with precision to your door in Lagos.</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.6rem' }}>Quick Links</div>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-              <Link to="/#arrivals" style={{ color: 'rgba(245,242,235,0.84)', textDecoration: 'none', fontSize: '0.92rem' }}>Arrivals</Link>
-              <Link to="/collection" style={{ color: 'rgba(245,242,235,0.84)', textDecoration: 'none', fontSize: '0.92rem' }}>Collection</Link>
-              <Link to="/#about" style={{ color: 'rgba(245,242,235,0.84)', textDecoration: 'none', fontSize: '0.92rem' }}>About Us</Link>
-              <Link to="/#contact" style={{ color: 'rgba(245,242,235,0.84)', textDecoration: 'none', fontSize: '0.92rem' }}>Contact</Link>
+            <div className="text-lg font-semibold text-white mb-4">Quick Links</div>
+            <nav className="flex flex-col gap-2">
+              <Link to="/#arrivals" className="text-neutral-300 hover:text-amber-400 transition-colors">Arrivals</Link>
+              <Link to="/collection" className="text-neutral-300 hover:text-amber-400 transition-colors">Collection</Link>
+              <Link to="/#about" className="text-neutral-300 hover:text-amber-400 transition-colors">About Us</Link>
+              <Link to="/#contact" className="text-neutral-300 hover:text-amber-400 transition-colors">Contact</Link>
             </nav>
           </div>
 
           {/* Contact & Socials */}
           <div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.6rem' }}>Contact</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '0.7rem' }}>
-              <div style={{ color: '#c9a84c', fontWeight: 700 }}>+234 704 520 7918</div>
-              <a href="mailto:contact@shinsempire.com" style={{ color: 'rgba(245,242,235,0.84)', textDecoration: 'none' }}>contact@shinsempire.com</a>
+            <div className="text-lg font-semibold text-white mb-4">Contact</div>
+            <div className="flex flex-col gap-1 mb-4 text-sm">
+              <div className="text-neutral-400">Phone:</div>
+              <a href="tel:+2347045207918" className="text-amber-400 font-semibold hover:opacity-90">+234 704 520 7918</a>
+              <div className="mt-2 text-neutral-400">Email:</div>
+              <a href="mailto:contact@shinsempire.com" className="text-amber-400 hover:text-amber-500 transition-colors">contact@shinsempire.com</a>
             </div>
 
-            <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.5rem' }}>Follow Us</div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" style={{ width: '38px', height: '38px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', background: '#0b0b09', color: '#f5f2eb', textDecoration: 'none' }}>IG</a>
-              <a href="https://wa.me/2347045207918" target="_blank" rel="noreferrer" aria-label="WhatsApp" style={{ width: '38px', height: '38px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', background: '#0b0b09', color: '#f5f2eb', textDecoration: 'none' }}>WA</a>
-              <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" style={{ width: '38px', height: '38px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', background: '#0b0b09', color: '#f5f2eb', textDecoration: 'none' }}>TT</a>
+            <div className="text-lg font-semibold text-white mb-3">Follow Us</div>
+            <div className="flex gap-3">
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="bg-neutral-900/80 border border-neutral-800 hover:border-amber-500/50 p-2 rounded-lg text-neutral-300 hover:text-amber-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line>
+              </svg>
+              </a>
+
+              <a href="https://wa.me/2347045207918" target="_blank" rel="noreferrer" aria-label="WhatsApp" className="bg-neutral-900/80 border border-neutral-800 hover:border-amber-500/50 p-2 rounded-lg text-neutral-300 hover:text-amber-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              </a>
+
+              <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" className="bg-neutral-900/80 border border-neutral-800 hover:border-amber-500/50 p-2 rounded-lg text-neutral-300 hover:text-amber-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4" aria-hidden="true">
+                <path d="M9 19V6l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+              </svg>
+              </a>
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', marginTop: '1.5rem', paddingTop: '1rem', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.9rem', color: 'rgba(245,242,235,0.7)' }}>© 2026 Shin's Empire. All rights reserved.</div>
-          <div style={{ marginTop: '0.4rem' }}><Link to="/admin/login" style={{ fontSize: '0.78rem', color: 'rgba(245,242,235,0.45)', textDecoration: 'none' }}>Admin Login</Link></div>
+        <div className="border-t border-neutral-800 mt-8 pt-6 text-center">
+          <div className="text-sm text-neutral-400">© 2026 Shin's Empire. All rights reserved.</div>
+          <div className="mt-2"><Link to="/admin/login" className="text-neutral-500 hover:text-neutral-300 text-xs">Admin Login</Link></div>
         </div>
       </div>
     </footer>
