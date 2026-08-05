@@ -483,10 +483,10 @@ export default function App() {
             📱 Order
           </a>
           <button className="neu-btn" onClick={() => setCartOpen(true)}
-            style={{ padding: '0.45rem 0.7rem', borderRadius: '3px', fontSize: '1rem', transition: 'transform 0.2s' }}
+            style={{ position: 'relative', padding: '0.45rem 0.7rem', borderRadius: '3px', fontSize: '1rem', transition: 'transform 0.2s', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.12)' }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)' }}>
-            🛒
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>🛒{cartItems.length > 0 && <span style={{ marginLeft: '6px', background: '#c9a84c', color: '#0a0a08', fontSize: '0.66rem', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{cartItems.length}</span>}</span>
           </button>
         </div>
       </header>
