@@ -535,9 +535,6 @@ export default function App() {
         </div>
       )}
 
-      {/* close provider */}
-      </div>
-    </CartContext.Provider>
 
       {/* ── AURORA HERO ────────────────────────────────── */}
       <section ref={heroRef} id="arrivals" className="aurora-bg" style={{
@@ -866,6 +863,7 @@ export default function App() {
         </div>
       </footer>
     </div>
+  </CartContext.Provider>
   )
 }
 
