@@ -425,7 +425,8 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh' }}>
+    <div className="min-h-screen flex flex-col bg-black text-white" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <main className="flex-1">
 
         {/* Global ambient layers */}
         <CursorGlow />
@@ -739,26 +740,7 @@ export default function App() {
         </RevealBlock>
       </section>
 
-      {/* ── FOOTER ─────────────────────────────────────── */}
-      <footer className="glass" style={{
-        borderTop: '1px solid rgba(201,168,76,0.15)', padding: '2rem',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexWrap: 'wrap', gap: '1rem', background: 'rgba(10,10,8,0.8)',
-      }}>
-        <img src={logoDark} alt="Shin's Fashion" style={{ height: '56px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(201,168,76,0.15))' }} />
-        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,242,235,0.35)', letterSpacing: '0.08em' }}>
-          Lagos, Nigeria · Est. 2024
-        </div>
-        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,242,235,0.35)', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span>Dubai · Milan · Istanbul · Paris</span>
-          <span style={{ color: 'rgba(201,168,76,0.2)' }}>·</span>
-          <Link to="/admin/login" style={{ color: 'rgba(201,168,76,0.45)', textDecoration: 'none', letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: '0.6rem', transition: 'color 0.2s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c9a84c' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(201,168,76,0.45)' }}>
-            Admin
-          </Link>
-        </div>
-      </footer>
+      </main>
     </div>
   )
 }
