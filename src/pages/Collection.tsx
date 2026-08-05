@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { supabase, CATEGORIES, getImageUrl, type Product, type Category } from '@/lib/supabase'
-import { CartContext } from '@/App'
+import { useCart } from '@/context/CartContext'
 import logoDark from '@/imports/SEWA_S__3_-1.png'
 
 const FALLBACK: Record<Category, string> = {
@@ -34,23 +34,7 @@ export default function Collection() {
 
   return (
     <div style={{ background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      {/* NAV */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, padding: '0 2rem', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(10,10,8,0.55)', borderBottom: '1px solid rgba(201,168,76,0.15)', backdropFilter: 'blur(22px) saturate(1.5)', WebkitBackdropFilter: 'blur(22px) saturate(1.5)', boxShadow: '0 8px 32px rgba(0,0,0,0.35)' }}>
-        <Link to="/">
-          <img src={logoDark} alt="Shin's Fashion" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-        </Link>
-        <nav style={{ display: 'flex', gap: '2rem' }}>
-          {['Arrivals', 'Collection', 'About', 'Contact'].map(l => (
-            <Link key={l} to={l === 'Collection' ? '/collection' : `/#${l.toLowerCase()}`}
-              style={{ fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: l === 'Collection' ? '#c9a84c' : '#f5f2eb', textDecoration: 'none', fontWeight: 500 }}>
-              {l}
-            </Link>
-          ))}
-        </nav>
-        <a href="https://wa.me/2347045207918?text=Hello%2C%20I%20saw%20a%20product%20I%27m%20interested%20in" style={{ fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', background: '#25D366', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '2px', textDecoration: 'none', fontWeight: 600 }}>
-          📱 Order
-        </a>
-      </header>
+      {/* Page content (Header is global) */}
 
       {/* HERO */}
       <div style={{ padding: '4rem 2rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
@@ -139,7 +123,7 @@ export default function Collection() {
 }
 
 function ProductCard({ product, fallback }: { product: Product; fallback: string }) {
-  const { addToCart } = useContext(CartContext)
+  const { addToCart } = useCart()
   const [hovered, setHovered] = useState(false)
   const imgSrc = product.images?.length > 0 ? getImageUrl(product.images[0]) : fallback
 
