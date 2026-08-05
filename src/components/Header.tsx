@@ -4,7 +4,7 @@ import logoDark from '@/imports/SEWA_S__3_-1.png'
 import { useCart } from '@/context/CartContext'
 
 export default function Header() {
-  const { cartItems, setCartOpen } = useCart()
+  const { cartItems, setCartOpen, totalCount } = useCart()
 
   return (
     <header style={{
@@ -23,8 +23,8 @@ export default function Header() {
       </nav>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <a href="https://wa.me/2347045207918?text=Hello" className="neu-btn" style={{ fontSize: '0.68rem', color: '#f5f2eb', padding: '0.45rem 1rem', borderRadius: '3px', textDecoration: 'none', fontWeight: 600 }}>📱 Order</a>
-        <button className="neu-btn" onClick={() => setCartOpen(true)} style={{ position: 'relative', padding: '0.45rem 0.7rem', borderRadius: '3px', fontSize: '1rem' }}>
-          🛒{cartItems.length > 0 && <span style={{ marginLeft: '6px', background: '#c9a84c', color: '#0a0a08', fontSize: '0.66rem', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{cartItems.length}</span>}
+        <button className="neu-btn" onClick={() => setCartOpen(true)} style={{ position: 'relative', padding: '0.45rem 0.7rem', borderRadius: '3px', fontSize: '1rem' }} aria-label="Open cart">
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>🛒{totalCount > 0 && <span style={{ marginLeft: '6px', background: '#c9a84c', color: '#0a0a08', fontSize: '0.66rem', padding: '0.12rem 0.5rem', borderRadius: '999px', fontWeight: 700 }}>{totalCount}</span>}</span>
         </button>
       </div>
     </header>
