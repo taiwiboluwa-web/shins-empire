@@ -9,6 +9,7 @@ import './index.css'
 import { CartProvider } from './context/CartContext'
 import Header from './components/Header'
 import CartDrawer from './components/CartDrawer'
+import Footer from './components/Footer'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
         <CartDrawer />
+        <Footer />
       </BrowserRouter>
     </CartProvider>
   </React.StrictMode>,
