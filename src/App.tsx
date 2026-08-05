@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, createContext } from 'react'
+
+export const CartContext = createContext<{ addToCart: (p: import('@/lib/supabase').Product) => void; cartItems: import('@/lib/supabase').Product[] }>({ addToCart: () => {}, cartItems: [] })
 import { Link } from 'react-router-dom'
 import logoDark from '@/imports/SEWA_S__3_-1.png'
 import { supabase, getImageUrl, getSalePrice, type Product } from '@/lib/supabase'
@@ -409,7 +411,6 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false)
   const [cartItems, setCartItems] = useState<Product[]>([])
   const addToCart = useCallback((p: Product) => { setCartItems(prev => [...prev, p]); setCartOpen(true) }, [])
-  useEffect(() => { (window as any).addToCart = addToCart; return () => { delete (window as any).addToCart } }, [addToCart])
   const [latestArrivals, setLatestArrivals] = useState<Product[]>([])
   const [arrivalsLoading, setArrivalsLoading] = useState(true)
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -427,16 +428,17 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh' }}>
+    <CartContext.Provider value={{ addToCart, cartItems }}>
+      <div style={{ fontFamily: 'Inter, system-ui, sans-serif', background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh' }}>
 
-      {/* Global ambient layers */}
-      <CursorGlow />
-      <ScrollProgress />
-      <div className="page-noise" />
-      <WhatsAppFloat />
+        {/* Global ambient layers */}
+        <CursorGlow />
+        <ScrollProgress />
+        <div className="page-noise" />
+        <WhatsAppFloat />
 
-      {/* ── GLASSMORPHISM NAV ──────────────────────────── */}
-      <header style={{
+        {/* ── GLASSMORPHISM NAV ──────────────────────────── */}
+        <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         padding: '0 2rem', height: '72px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -488,6 +490,10 @@ export default function App() {
           </button>
         </div>
       </header>
+
+      {/* close provider */}
+      </div>
+    </CartContext.Provider>
 
       {/* ── CART DRAWER ────────────────────────────────── */}
       {cartOpen && (

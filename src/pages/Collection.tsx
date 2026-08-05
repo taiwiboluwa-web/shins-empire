@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { supabase, CATEGORIES, getImageUrl, type Product, type Category } from '@/lib/supabase'
+import { CartContext } from '@/App'
 import logoDark from '@/imports/SEWA_S__3_-1.png'
 
 const FALLBACK: Record<Category, string> = {
@@ -138,6 +139,7 @@ export default function Collection() {
 }
 
 function ProductCard({ product, fallback }: { product: Product; fallback: string }) {
+  const { addToCart } = useContext(CartContext)
   const [hovered, setHovered] = useState(false)
   const imgSrc = product.images?.length > 0 ? getImageUrl(product.images[0]) : fallback
 
@@ -157,7 +159,7 @@ function ProductCard({ product, fallback }: { product: Product; fallback: string
         <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'rgba(10,10,8,0.85)', padding: '0.2rem 0.6rem' }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.55rem', color: '#c9a84c', letterSpacing: '0.1em' }}>{product.status || 'CLEARED'}</span>
         </div>
-        <button type="button" onClick={e => { e.stopPropagation(); e.preventDefault(); (window as any).addToCart?.(product); }}
+        <button type="button" onClick={e => { e.stopPropagation(); e.preventDefault(); addToCart(product); }}
           aria-label={`Add ${product.name} to cart`}
           style={{ position: 'absolute', bottom: '0.6rem', right: '0.6rem', background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', border: 'none', padding: '0.45rem 0.6rem', borderRadius: '6px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>+</span>
