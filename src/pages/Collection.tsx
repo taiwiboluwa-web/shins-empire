@@ -157,6 +157,11 @@ function ProductCard({ product, fallback }: { product: Product; fallback: string
         <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'rgba(10,10,8,0.85)', padding: '0.2rem 0.6rem' }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.55rem', color: '#c9a84c', letterSpacing: '0.1em' }}>{product.status || 'CLEARED'}</span>
         </div>
+        <button type="button" onClick={e => { e.stopPropagation(); e.preventDefault(); (window as any).addToCart?.(product); }}
+          aria-label={`Add ${product.name} to cart`}
+          style={{ position: 'absolute', bottom: '0.6rem', right: '0.6rem', background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', border: 'none', padding: '0.45rem 0.6rem', borderRadius: '6px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>+</span>
+        </button>
       </div>
       <div style={{ padding: '1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>

@@ -407,6 +407,9 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false)
   const [activeNav, setActiveNav] = useState('Arrivals')
   const [cartOpen, setCartOpen] = useState(false)
+  const [cartItems, setCartItems] = useState<Product[]>([])
+  const addToCart = useCallback((p: Product) => { setCartItems(prev => [...prev, p]); setCartOpen(true) }, [])
+  useEffect(() => { (window as any).addToCart = addToCart; return () => { delete (window as any).addToCart } }, [addToCart])
   const [latestArrivals, setLatestArrivals] = useState<Product[]>([])
   const [arrivalsLoading, setArrivalsLoading] = useState(true)
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -500,13 +503,30 @@ export default function App() {
               <div style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: '1.5rem' }}>Your Cart</div>
               <button onClick={() => setCartOpen(false)} className="neu-btn" style={{ padding: '0.4rem 0.6rem', borderRadius: '3px', fontSize: '0.9rem' }}>✕</button>
             </div>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-              <div style={{ fontSize: '2rem', opacity: 0.3 }}>🛒</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,242,235,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Manifest Empty</div>
-              <Link to="/collection" onClick={() => setCartOpen(false)}
-                style={{ marginTop: '1rem', background: '#c9a84c', color: '#0a0a08', padding: '0.75rem 1.5rem', fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700 }}>
-                Browse Collection
-              </Link>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', paddingRight: '0.5rem' }}>
+              {cartItems.length === 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem', paddingTop: '2rem' }}>
+                  <div style={{ fontSize: '2rem', opacity: 0.3 }}>🛒</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,242,235,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Manifest Empty</div>
+                  <Link to="/collection" onClick={() => setCartOpen(false)}
+                    style={{ marginTop: '1rem', background: '#c9a84c', color: '#0a0a08', padding: '0.75rem 1.5rem', fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700 }}>
+                    Browse Collection
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  {cartItems.map((it, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 600 }}>{it.name}</div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", color: '#c9a84c' }}>{it.price ? `₦${it.price.toLocaleString()}` : '—'}</div>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => { setCartItems([]); setCartOpen(false) }} className="neu-btn" style={{ padding: '0.6rem 0.9rem' }}>Clear</button>
+                    <button className="neu-btn" style={{ background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', padding: '0.6rem 0.9rem', fontWeight: 700 }}>Checkout</button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: -1 }} />
