@@ -17,7 +17,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addToCart = useCallback((p: Product) => {
     setCartItems(prev => [...prev, p])
-    setCartOpen(true)
+    // Intentionally do not auto-open the drawer on add; keep UX non-disruptive
   }, [])
 
   const clearCart = useCallback(() => {

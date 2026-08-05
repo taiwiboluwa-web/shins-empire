@@ -18,6 +18,13 @@ export default function Collection() {
   const [products, setProducts] = useState<Product[]>([])
   const [active, setActive] = useState<Category | 'All'>(initialCategory ?? 'All')
   const [loading, setLoading] = useState(true)
+  const [previewProduct, setPreviewProduct] = useState<Product | null>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setPreviewProduct(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   useEffect(() => {
     supabase
@@ -106,13 +113,23 @@ export default function Collection() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1px', background: 'rgba(201,168,76,0.12)' }}>
             {filtered.map(product => (
-              <ProductCard key={product.id} product={product} fallback={FALLBACK[product.category as Category] || FALLBACK.Clothing} />
+              <ProductCard key={product.id} product={product} fallback={FALLBACK[product.category as Category] || FALLBACK.Clothing} onPreview={setPreviewProduct} />
             ))}
           </div>
         )}
       </div>
 
       {/* FOOTER */}
+      {/* Preview Modal */}
+      {previewProduct && (
+        <div role="dialog" aria-modal="true" onClick={() => setPreviewProduct(null)} style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(6px)' }}>
+          <div onClick={e => e.stopPropagation()} style={{ position: 'relative', maxWidth: '960px', width: '100%', maxHeight: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src={previewProduct.images?.length ? getImageUrl(previewProduct.images[0]) : FALLBACK[previewProduct.category as Category] || FALLBACK.Clothing} alt={previewProduct.name} style={{ maxWidth: '100%', maxHeight: '90vh', objectFit: 'contain', borderRadius: '6px' }} />
+            <button onClick={() => setPreviewProduct(null)} aria-label="Close preview" style={{ position: 'absolute', top: '-12px', right: '-12px', background: '#000', border: '1px solid rgba(255,255,255,0.06)', color: '#fff', padding: '0.4rem 0.6rem', borderRadius: '999px', fontSize: '1rem' }}>✕</button>
+          </div>
+        </div>
+      )}
+
       <footer style={{ borderTop: '1px solid rgba(201,168,76,0.15)', padding: '2rem', textAlign: 'center', marginTop: '5rem' }}>
         <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,242,235,0.35)', letterSpacing: '0.08em' }}>
           Shin&apos;s Fashion · Lagos, Nigeria · Dubai · Milan · Istanbul · Paris
@@ -122,7 +139,7 @@ export default function Collection() {
   )
 }
 
-function ProductCard({ product, fallback }: { product: Product; fallback: string }) {
+function ProductCard({ product, fallback, onPreview }: { product: Product; fallback: string; onPreview?: (p: Product | null) => void }) {
   const { addToCart } = useCart()
   const [hovered, setHovered] = useState(false)
   const imgSrc = product.images?.length > 0 ? getImageUrl(product.images[0]) : fallback
@@ -138,7 +155,8 @@ function ProductCard({ product, fallback }: { product: Product; fallback: string
           src={imgSrc}
           alt={product.name}
           onError={e => { (e.target as HTMLImageElement).src = fallback }}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transform: hovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.4s ease', filter: 'brightness(0.82)' }}
+          onClick={() => onPreview?.(product)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', transform: hovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.4s ease', filter: 'brightness(0.82)', cursor: 'zoom-in' }}
         />
         <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'rgba(10,10,8,0.85)', padding: '0.2rem 0.6rem' }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.55rem', color: '#c9a84c', letterSpacing: '0.1em' }}>{product.status || 'CLEARED'}</span>
