@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { supabase, CATEGORIES, getImageUrl, type Product, type Category } from '@/lib/supabase'
 import { useCart } from '@/context/CartContext'
-import logoDark from '@/imports/SEWA_S__3_-1.png'
 
 const FALLBACK: Record<Category, string> = {
   Jewelry: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&h=400&fit=crop&auto=format',
@@ -41,8 +40,6 @@ export default function Collection() {
 
   return (
     <div style={{ background: '#0a0a08', color: '#f5f2eb', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      {/* Page content (Header is global) */}
-
       {/* HERO */}
       <div style={{ padding: '4rem 2rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', letterSpacing: '0.15em', color: '#c9a84c', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
@@ -119,7 +116,6 @@ export default function Collection() {
         )}
       </div>
 
-      {/* FOOTER */}
       {/* Preview Modal */}
       {previewProduct && (
         <div role="dialog" aria-modal="true" onClick={() => setPreviewProduct(null)} style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(6px)' }}>
@@ -144,6 +140,12 @@ function ProductCard({ product, fallback, onPreview }: { product: Product; fallb
   const [hovered, setHovered] = useState(false)
   const imgSrc = product.images?.length > 0 ? getImageUrl(product.images[0]) : fallback
 
+  // Extract discount fields from Supabase object
+  const discountPercent = (product as any).discount_percent || (product as any).discount_percentage || 0
+  const hasDiscount = discountPercent > 0
+  const originalPrice = product.price
+  const discountedPrice = (product as any).discount_price || (originalPrice * (1 - discountPercent / 100))
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -158,24 +160,52 @@ function ProductCard({ product, fallback, onPreview }: { product: Product; fallb
           onClick={() => onPreview?.(product)}
           style={{ width: '100%', height: '100%', objectFit: 'cover', transform: hovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.4s ease', filter: 'brightness(0.82)', cursor: 'zoom-in' }}
         />
+        
+        {/* Discount Badge */}
+        {hasDiscount && (
+          <div style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', background: '#ef4444', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: '3px', fontWeight: 700, fontSize: '0.65rem', fontFamily: "'DM Mono', monospace" }}>
+            -{discountPercent}%
+          </div>
+        )}
+
+        {/* Status Badge */}
         <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'rgba(10,10,8,0.85)', padding: '0.2rem 0.6rem' }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.55rem', color: '#c9a84c', letterSpacing: '0.1em' }}>{product.status || 'CLEARED'}</span>
         </div>
-        <button type="button" onClick={e => { e.stopPropagation(); e.preventDefault(); addToCart(product); }}
+
+        {/* Add to Cart Button */}
+        <button type="button" onClick={e => { e.stopPropagation(); e.preventDefault(); addToCart({ ...product, price: hasDiscount ? discountedPrice : originalPrice }); }}
           aria-label={`Add ${product.name} to cart`}
           style={{ position: 'absolute', bottom: '0.6rem', right: '0.6rem', background: 'linear-gradient(135deg, #d4a942 0%, #f0cc6a 50%)', color: '#0a0a08', border: 'none', padding: '0.45rem 0.6rem', borderRadius: '6px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>+</span>
         </button>
       </div>
+
       <div style={{ padding: '1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
           <div style={{ fontSize: '0.88rem', fontWeight: 500, flex: 1, marginRight: '0.5rem' }}>{product.name}</div>
-          {product.price > 0 && (
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.75rem', color: '#c9a84c', whiteSpace: 'nowrap' }}>
-              ₦{product.price.toLocaleString()}
+          
+          {/* Price & Discount Display */}
+          {originalPrice > 0 && (
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.75rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+              {hasDiscount ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  <span style={{ textDecoration: 'line-through', color: 'rgba(245,242,235,0.4)', fontSize: '0.65rem' }}>
+                    ₦{originalPrice.toLocaleString()}
+                  </span>
+                  <span style={{ color: '#ef4444', fontWeight: 700 }}>
+                    ₦{discountedPrice.toLocaleString()}
+                  </span>
+                </div>
+              ) : (
+                <span style={{ color: '#c9a84c' }}>
+                  ₦{originalPrice.toLocaleString()}
+                </span>
+              )}
             </div>
           )}
         </div>
+
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', color: 'rgba(245,242,235,0.4)', letterSpacing: '0.08em' }}>
             {product.origin || '—'} → LOS
@@ -184,6 +214,7 @@ function ProductCard({ product, fallback, onPreview }: { product: Product; fallb
             {product.category}
           </span>
         </div>
+
         {product.description && (
           <p style={{ fontSize: '0.78rem', color: 'rgba(245,242,235,0.45)', marginTop: '0.5rem', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {product.description}
