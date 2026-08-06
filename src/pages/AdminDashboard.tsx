@@ -39,6 +39,50 @@ export default function AdminDashboard() {
     })
   }, [])
 
+  // Auto-logout on inactivity: 15 minutes (900,000 ms)
+  useEffect(() => {
+    const TIMEOUT = 15 * 60 * 1000 // 15 minutes
+    const timerRef = { id: undefined as unknown as number }
+
+    const logout = async () => {
+      try {
+        await supabase.auth.signOut()
+      } finally {
+        // Redirect to admin login to keep flow consistent
+        navigate('/admin/login')
+      }
+    }
+
+    const resetTimer = () => {
+      if (timerRef.id) window.clearTimeout(timerRef.id)
+      // @ts-ignore
+      timerRef.id = window.setTimeout(logout, TIMEOUT)
+    }
+
+    // Events that indicate user activity
+    const events = ['mousemove', 'keydown', 'scroll', 'touchstart'] as const
+    events.forEach(ev => window.addEventListener(ev, resetTimer, { passive: true }))
+
+    // Start initial timer
+    resetTimer()
+
+    // Pause timer when page is hidden, resume when visible
+    const handleVisibility = () => {
+      if (document.hidden) {
+        if (timerRef.id) window.clearTimeout(timerRef.id)
+      } else {
+        resetTimer()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      events.forEach(ev => window.removeEventListener(ev, resetTimer))
+      document.removeEventListener('visibilitychange', handleVisibility)
+      if (timerRef.id) window.clearTimeout(timerRef.id)
+    }
+  }, [navigate])
+
   async function fetchProducts() {
     setLoading(true)
     const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false })
