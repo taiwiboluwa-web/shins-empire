@@ -155,20 +155,33 @@ function SeoEnhancer() {
   return null
 }
 
+function SiteChrome() {
+  const location = useLocation()
+  const isAdmin = location.pathname.startsWith('/admin')
+
+  if (isAdmin) return null
+
+  return (
+    <>
+      <Header />
+      <CartDrawer />
+      <Footer />
+    </>
+  )
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CartProvider>
       <BrowserRouter>
         <SeoEnhancer />
-        <Header />
+        <SiteChrome />
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
-        <CartDrawer />
-        <Footer />
       </BrowserRouter>
     </CartProvider>
   </React.StrictMode>,
