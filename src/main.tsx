@@ -14,6 +14,35 @@ import { supabase, getImageUrl, getSalePrice, type Product } from './lib/supabas
 
 const SITE_URL = 'https://shins-empire.vercel.app'
 
+function NavigationScrollManager() {
+  const location = useLocation()
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (location.pathname === '/collection') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+        return
+      }
+
+      if (location.pathname === '/') {
+        const hash = location.hash.replace(/^#/, '')
+        if (hash) {
+          const target = document.getElementById(hash)
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            return
+          }
+        }
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+      }
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [location.pathname, location.hash])
+
+  return null
+}
+
 function SeoEnhancer() {
   const location = useLocation()
 
@@ -174,6 +203,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CartProvider>
       <BrowserRouter>
+        <NavigationScrollManager />
         <SeoEnhancer />
         <SiteChrome />
         <Routes>
