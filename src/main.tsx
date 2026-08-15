@@ -78,6 +78,22 @@ function SeoEnhancer() {
   }, [])
 
   useEffect(() => {
+    const updateImageAlt = () => {
+      document.querySelectorAll('img').forEach((img) => {
+        if (img.alt?.trim()) return
+        const source = img.currentSrc || img.src
+        const type = source.match(/(bag|shoe|jewel|shade|glass|cloth|dress|fashion)/i)?.[1]?.toLowerCase()
+        const label = type === 'bag' ? 'luxury bag' : type === 'shoe' ? 'luxury shoes' : type?.includes('jewel') ? 'luxury jewelry' : type === 'shade' || type === 'glass' ? 'fashion shades' : type?.includes('cloth') || type === 'dress' || type === 'fashion' ? 'premium fashion' : 'luxury fashion'
+        img.alt = `${label} from Shin's Empire in Lagos, Nigeria`
+      })
+    }
+    updateImageAlt()
+    const observer = new MutationObserver(updateImageAlt)
+    observer.observe(document.body, { childList: true, subtree: true })
+    return () => observer.disconnect()
+  }, [location.pathname])
+
+  useEffect(() => {
     let cancelled = false
     const injectProductSchema = async () => {
       if (location.pathname !== '/collection') return
