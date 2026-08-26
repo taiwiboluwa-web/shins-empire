@@ -16,5 +16,11 @@
         { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With, content-type, Authorization" }
       ]
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/keep-alive",
+      "schedule": "0 5 * * *"
+    }
   ]
 }
