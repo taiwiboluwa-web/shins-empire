@@ -126,12 +126,17 @@ function SeoEnhancer() {
     let cancelled = false
     const injectProductSchema = async () => {
       if (location.pathname !== '/collection') return
-      const { data } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100)
-      if (cancelled || !data?.length) return
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100)
+
+        if (cancelled || error || !data?.length) {
+          if (error) console.warn('[Shins Empire] Product schema skipped:', error.message)
+          return
+        }
 
       const products = data as Product[]
       const jsonLd = {
@@ -171,7 +176,10 @@ function SeoEnhancer() {
         script.type = 'application/ld+json'
         document.head.appendChild(script)
       }
-      script.textContent = JSON.stringify(jsonLd)
+        script.textContent = JSON.stringify(jsonLd)
+      } catch (error) {
+        if (!cancelled) console.warn('[Shins Empire] Product schema request failed:', error)
+      }
     }
 
     injectProductSchema()
