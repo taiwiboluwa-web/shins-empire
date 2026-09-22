@@ -26,14 +26,35 @@ export default function Collection() {
   }, [])
 
   useEffect(() => {
-    supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
+    let cancelled = false
+
+    const loadProducts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (cancelled) return
+        if (error) {
+          console.error('[Shins Empire] Collection failed:', error.message)
+          setProducts([])
+          return
+        }
+
         setProducts(data ?? [])
-        setLoading(false)
-      })
+      } catch (error) {
+        if (!cancelled) {
+          console.error('[Shins Empire] Collection request failed:', error)
+          setProducts([])
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    loadProducts()
+    return () => { cancelled = true }
   }, [])
 
   const filtered = active === 'All' ? products : products.filter(p => p.category === active)
