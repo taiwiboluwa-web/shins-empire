@@ -9,13 +9,22 @@ export default async function handler(req: Request) {
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2dyamh1cXl6dmdyYWhvYnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0Mzk2NDYsImV4cCI6MjEwMTAxNTY0fQ.ig8HKUiqGSExaQZcLsVbVti1m1XjhJyKNBpl7sJZkNI'
 
   try {
-    const response = await fetch(`${supabaseUrl}/rest/v1/products?select=id&limit=1`, {
-      headers: {
-        apikey: supabaseAnonKey,
-        Authorization: `Bearer ${supabaseAnonKey}`,
-      },
-      cache: 'no-store',
-    })
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+
+    let response: Response
+    try {
+      response = await fetch(`${supabaseUrl}/rest/v1/products?select=id&limit=1`, {
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseAnonKey}`,
+        },
+        cache: 'no-store',
+        signal: controller.signal,
+      })
+    } finally {
+      clearTimeout(timeout)
+    }
 
     if (!response.ok) {
       const detail = await response.text()
