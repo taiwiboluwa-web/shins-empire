@@ -420,8 +420,36 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    supabase.from('products').select('*').eq('is_latest_arrival', true).order('updated_at', { ascending: false })
-      .then(({ data }) => { setLatestArrivals(data ?? []); setArrivalsLoading(false) })
+    let cancelled = false
+
+    const loadLatestArrivals = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('is_latest_arrival', true)
+          .order('updated_at', { ascending: false })
+
+        if (cancelled) return
+        if (error) {
+          console.error('[Shins Empire] Latest arrivals failed:', error.message)
+          setLatestArrivals([])
+          return
+        }
+
+        setLatestArrivals(data ?? [])
+      } catch (error) {
+        if (!cancelled) {
+          console.error('[Shins Empire] Latest arrivals request failed:', error)
+          setLatestArrivals([])
+        }
+      } finally {
+        if (!cancelled) setArrivalsLoading(false)
+      }
+    }
+
+    loadLatestArrivals()
+    return () => { cancelled = true }
   }, [])
 
   return (
