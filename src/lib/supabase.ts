@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const SUPABASE_URL = 'https://efogrjhuqyzvgrahobto.supabase.co'
 const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c3VwYWJhc2UiLCJyZWYiOiJlZm9ncmpodXF5enZncmFob2J0byIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg1NDM5NjQ2LCJleHAiOjIxMDEwMTU2NDZ9.ig8HKUiqGSExaQZcLsVbVti1m1XjhJyKNBpl7sJZkNI'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmb2dyamh1cXl6dmdyYWhvYnRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0Mzk2NDYsImV4cCI6MjEwMTAxNTY0Nn0.ig8HKUiqGSExaQZcLsVbVti1m1XjhJyKNBpl7sJZkNI'
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 8000
 
