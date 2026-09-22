@@ -85,9 +85,26 @@ export default function AdminDashboard() {
 
   async function fetchProducts() {
     setLoading(true)
-    const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-    setProducts(data ?? [])
-    setLoading(false)
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        showToast('Could not load products: ' + error.message, 'error')
+        setProducts([])
+        return
+      }
+
+      setProducts(data ?? [])
+    } catch (error) {
+      showToast('Could not reach the product database. Please try again.', 'error')
+      console.error('[Shins Empire] Admin product load failed:', error)
+      setProducts([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   function showToast(msg: string, type: 'success' | 'error' = 'success') {
